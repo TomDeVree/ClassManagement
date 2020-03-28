@@ -1,0 +1,28 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "ClassManagementService";
+
+package student;
+
+// The greeting service definition.
+service Student {
+  // Sends a greeting
+  rpc ListStudentsForClass (ListStudentsForClassRequest) returns (ListStudentsForClassReply);
+}
+
+// The request message containing the user's name.
+message ListStudentsForClassRequest {
+  string className = 1;
+}
+
+// The response message containing the greetings.
+message ListStudentsForClassReply {
+  repeated StudentInClass students = 1;
+}
+
+message StudentInClass{
+    int32 studentNumber = 1;
+    string firstName = 2;
+    string lastName = 3;
+    bool isPresentToday = 4;
+}

@@ -1,0 +1,42 @@
+﻿@page "/classdaily"
+
+@using ClassManagementClient.Data
+@inject StudentService StudentService
+
+<h3>ClassDaily</h3>
+
+@if (students == null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Voornaam</th>
+				<th>Familienaam</th>
+				<th>Aanwezig</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var student in students)
+			{
+				<tr>
+					<td>@student.FirstName</td>
+					<td>@student.LastName</td>
+					<td>@student.IsPresentToday</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+	@code {
+private IEnumerable<ClassManagementService.StudentInClass> students;
+
+	protected override async Task OnInitializedAsync()
+	{
+		students = await StudentService.ListStudentsForClass("1A");
+	}
+	}
