@@ -25,4 +25,5 @@ message StudentInClass{
     string firstName = 2;
     string lastName = 3;
     bool isPresentToday = 4;
+    int32 numberInClass = 5;
 }

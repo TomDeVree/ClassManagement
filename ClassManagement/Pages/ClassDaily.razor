@@ -1,9 +1,10 @@
 ﻿@page "/classdaily"
 
 @using ClassManagementClient.Data
+@using Syncfusion.Blazor.Lists
 @inject StudentService StudentService
 
-<h3>ClassDaily</h3>
+<h3>Klas</h3>
 
 @if (students == null)
 {
@@ -11,32 +12,41 @@
 }
 else
 {
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Voornaam</th>
-				<th>Familienaam</th>
-				<th>Aanwezig</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var student in students)
-			{
-				<tr>
-					<td>@student.FirstName</td>
-					<td>@student.LastName</td>
-					<td>@student.IsPresentToday</td>
-				</tr>
-			}
-		</tbody>
-	</table>
+<SfListView DataSource="@students" CssClass="e-list-template" TValue="ClassManagementService.StudentInClass" >
+	<ListViewFieldSettings Id="StudentNumber" Text="FirstName" SortBy="NumberInClass" />
+	<ListViewEvents TValue="ClassManagementService.StudentInClass" Selected="@(e => StudentSelected(e.Data))"/>
+	<ListViewTemplates TValue="ClassManagementService.StudentInClass">
+		<Template>
+			<div class="e-list-wrapper e-list-multi-line e-list-avatar">
+				<span class="e-avatar e-avatar-circle">@((context as ClassManagementService.StudentInClass).NumberInClass)</span>
+				
+				<span class="e-list-item-header">@((context as ClassManagementService.StudentInClass).FirstName)</span>
+				<span class="e-list-content">@((context as ClassManagementService.StudentInClass).FullName)</span>
+			</div>
+		</Template>
+	</ListViewTemplates>
+</SfListView>
+}
+<br />
+<br />
+
+@if (selectedStudent != null)
+{
+	<p>student geselecteerd</p>
 }
 
-	@code {
-private IEnumerable<ClassManagementService.StudentInClass> students;
+@code {
+	private IEnumerable<ClassManagementService.StudentInClass>? students;
+
+	private ClassManagementService.StudentInClass? selectedStudent;
 
 	protected override async Task OnInitializedAsync()
 	{
 		students = await StudentService.ListStudentsForClass("1A");
 	}
+
+	protected void StudentSelected(ClassManagementService.StudentInClass selectedStudent)
+	{
+		this.selectedStudent = selectedStudent;
 	}
+}
